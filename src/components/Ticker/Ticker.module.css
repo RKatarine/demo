@@ -1,0 +1,7 @@
+.ticker {
+  width: 300px;
+  height: 200px;
+  border: solid black 1px;
+  text-align: center;
+  margin: 10px;
+}
