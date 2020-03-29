@@ -2,6 +2,7 @@ import React from "react";
 import DefaultSelect from "./DefaultSelect";
 import MultipleSelect from "./MultipleSelect";
 import CssCustomizeDemo from "./CssCustomizeDemo";
+import ValueCustomizeDemo from "./ValueCustomizeDemo";
 
 const style = {
   display: "flex",
@@ -44,10 +45,20 @@ Multiple.story = {
 
 export const CssCustomize = () => (
   <Presentation>
-    <CssCustomizeDemo value="Some item" items={items} />
+    <CssCustomizeDemo items={items} />
   </Presentation>
 );
 
 CssCustomize.story = {
   name: "CssCustomize",
+};
+
+export const ValueCustomize = () => (
+  <Presentation>
+    <ValueCustomizeDemo items={items} />
+  </Presentation>
+);
+
+ValueCustomize.story = {
+  name: "ValueCustomize",
 };
