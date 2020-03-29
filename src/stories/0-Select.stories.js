@@ -6,7 +6,9 @@ const style = {
   justifyContent: "center",
   alignItems: "center",
   width: "100%",
-  height: "-webkit-fill-available",
+  // height: "-webkit-fill-available",
+  height: "160vh",
+  top: "400px",
 };
 
 const items = ["Item 1", "Item 2", "Item 3", "Item 4"];

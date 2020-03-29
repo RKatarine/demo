@@ -15,15 +15,31 @@ export default class Select extends React.Component {
     opened: false,
   };
 
+  componentDidMount() {
+    window.addEventListener("scroll", this.setItemContainerBox);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.setItemContainerBox);
+  }
+
   getItemsContainerBox = () => {
-    // ||    this.itemsContainerElement === undefined
-    if (this.rootElement === undefined) {
+    if (
+      this.rootElement === undefined ||
+      this.rootElement === null ||
+      this.itemsContainerElement === undefined ||
+      this.itemsContainerElement === null
+    ) {
       return;
     }
     const rootElementBoundary = this.rootElement.getBoundingClientRect();
-    // const itemsContainerElementBoundary = this.itemsContainerElement.getBoundingClientRect();
     const left = rootElementBoundary.left;
-    const top = rootElementBoundary.top;
+    const bottom =
+      rootElementBoundary.top + this.itemsContainerElement.offsetHeight;
+    const top =
+      bottom > window.innerHeight
+        ? rootElementBoundary.bottom - this.itemsContainerElement.offsetHeight
+        : rootElementBoundary.top;
     return {
       width: `${this.rootElement.offsetWidth}px`,
       left: `${left}px`,
@@ -32,8 +48,8 @@ export default class Select extends React.Component {
   };
 
   setItemContainerBox = () => {
-    const itemContainerBox = this.getItemsContainerBox();
-    this.setState({ itemContainerBox });
+    const itemsContainerBox = this.getItemsContainerBox();
+    this.setState({ itemsContainerBox });
   };
 
   renderItemsContainer = () => (
@@ -63,25 +79,18 @@ export default class Select extends React.Component {
   );
 
   openItemsContainer = () => {
-    const metric = this.getItemsContainerBox();
-    console.log(metric);
-    this.setState((state) => ({
-      opened: true,
-      itemsContainerBox: {
-        ...state.itemsContainerBox,
-        ...metric,
-      },
-    }));
+    this.setState(
+      (state) => ({
+        opened: true,
+      }),
+      this.setItemContainerBox
+    );
   };
 
   closeItemsContainer = () => {
     this.setState({
       opened: false,
     });
-  };
-
-  onClickHandler = (item) => (event) => {
-    this.props.onChange(item);
   };
 
   render() {
