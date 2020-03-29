@@ -2,17 +2,22 @@ import React from "react";
 import styles from "./Select.module.css";
 import ArrowIcon from "./ArrowIcon";
 import DefaultValueComponent from "./DefaultValueComponent";
+// import DefaultItemComponent from "./DefaultItemComponent";
 
 export default class Select extends React.Component {
   static defaultProps = {
     valueComponent: DefaultValueComponent,
+    iconComponent: ArrowIcon,
+    // itemComponent: DefaultItemComponent,
     items: [],
     onChange: () => {},
+    multiple: false,
   };
 
   state = {
     itemsContainerBox: {},
     opened: false,
+    selected: [],
   };
 
   componentDidMount() {
@@ -52,6 +57,33 @@ export default class Select extends React.Component {
     this.setState({ itemsContainerBox });
   };
 
+  select = (item) => {
+    const hasSelected = this.state.selected.includes(item);
+    this.setState((state) => ({
+      selected: hasSelected
+        ? state.selected.filter((i) => i !== item)
+        : [...state.selected, item],
+    }));
+  };
+
+  onItemChoose = (item) => (event) => {
+    if (this.props.multiple) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.select(item);
+    } else {
+      this.props.onChange(item);
+    }
+  };
+
+  isActive = (item) => {
+    if (this.props.multiple) {
+      return this.state.selected.includes(item);
+    } else {
+      return this.props.value === item;
+    }
+  };
+
   renderItemsContainer = () => (
     <div className={styles.wrapper} onClick={this.closeItemsContainer}>
       <div
@@ -65,10 +97,8 @@ export default class Select extends React.Component {
           {this.props.items.map((item, idx) => (
             <li
               key={idx}
-              className={
-                item === this.props.value ? styles.itemActive : styles.item
-              }
-              onClick={() => this.props.onChange(item)}
+              className={this.isActive(item) ? styles.itemActive : styles.item}
+              onClick={this.onItemChoose(item)}
             >
               {item}
             </li>
@@ -91,6 +121,10 @@ export default class Select extends React.Component {
     this.setState({
       opened: false,
     });
+
+    if (this.props.multiple) {
+      this.props.onChange(this.state.selected);
+    }
   };
 
   render() {

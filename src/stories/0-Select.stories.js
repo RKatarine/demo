@@ -1,5 +1,6 @@
 import React from "react";
 import DefaultSelect from "./DefaultSelect";
+import MultipleSelect from "./MultipleSelect";
 
 const style = {
   display: "flex",
@@ -13,19 +14,29 @@ const style = {
 
 const items = ["Item 1", "Item 2", "Item 3", "Item 4"];
 
-const Presentation = () => (
-  <div style={style}>
-    <DefaultSelect value="Some item" items={items} />
-  </div>
-);
+const Presentation = ({ children }) => <div style={style}>{children}</div>;
 
 export default {
   title: "Components",
   component: Presentation,
 };
 
-export const ToStorybook = () => <Presentation />;
+export const Select = () => (
+  <Presentation>
+    <DefaultSelect value="Some item" items={items} />
+  </Presentation>
+);
 
-ToStorybook.story = {
+Select.story = {
   name: "Select",
+};
+
+export const Multiple = () => (
+  <Presentation>
+    <MultipleSelect value="Some item" items={items} />
+  </Presentation>
+);
+
+Multiple.story = {
+  name: "Multiple",
 };

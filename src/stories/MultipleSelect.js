@@ -6,15 +6,23 @@ export default class DefaultSelect extends React.Component {
     value: this.props.value,
   };
 
-  onChooseItem = (item) => {
+  onChooseItem = (items) => {
+    const value = items.join(", ").slice(0, 20);
     this.setState({
-      value: item,
+      value: value === items.join(", ") ? value : `${value}...`,
     });
   };
 
   render() {
     const { items } = this.props;
     const { value } = this.state;
-    return <Select items={items} value={value} onChange={this.onChooseItem} />;
+    return (
+      <Select
+        items={items}
+        multiple
+        value={value}
+        onChange={this.onChooseItem}
+      />
+    );
   }
 }
