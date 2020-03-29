@@ -20,6 +20,9 @@
   border: none;
   outline: none !important;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .container {

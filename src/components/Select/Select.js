@@ -2,13 +2,13 @@ import React from "react";
 import styles from "./Select.module.css";
 import ArrowIcon from "./ArrowIcon";
 import DefaultValueComponent from "./DefaultValueComponent";
-// import DefaultItemComponent from "./DefaultItemComponent";
+import DefaultItemComponent from "./DefaultItemComponent";
 
 export default class Select extends React.Component {
   static defaultProps = {
     valueComponent: DefaultValueComponent,
     iconComponent: ArrowIcon,
-    // itemComponent: DefaultItemComponent,
+    itemComponent: DefaultItemComponent,
     items: [],
     onChange: () => {},
     multiple: false,
@@ -84,29 +84,34 @@ export default class Select extends React.Component {
     }
   };
 
-  renderItemsContainer = () => (
-    <div className={styles.wrapper} onClick={this.closeItemsContainer}>
-      <div
-        className={styles.container}
-        ref={(itemsContainer) => {
-          this.itemsContainerElement = itemsContainer;
-        }}
-        style={this.state.itemsContainerBox}
-      >
-        <ul className={styles.list}>
-          {this.props.items.map((item, idx) => (
-            <li
-              key={idx}
-              className={this.isActive(item) ? styles.itemActive : styles.item}
-              onClick={this.onItemChoose(item)}
-            >
-              {item}
-            </li>
-          ))}
-        </ul>
+  renderItemsContainer = () => {
+    const { itemComponent: ItemComponent } = this.props;
+    return (
+      <div className={styles.wrapper} onClick={this.closeItemsContainer}>
+        <div
+          className={styles.container}
+          ref={(itemsContainer) => {
+            this.itemsContainerElement = itemsContainer;
+          }}
+          style={this.state.itemsContainerBox}
+        >
+          <ul className={styles.list}>
+            {this.props.items.map((item, idx) => (
+              <li
+                key={idx}
+                className={
+                  this.isActive(item) ? styles.itemActive : styles.item
+                }
+                onClick={this.onItemChoose(item)}
+              >
+                <ItemComponent value={item} />
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   openItemsContainer = () => {
     this.setState(
@@ -128,7 +133,12 @@ export default class Select extends React.Component {
   };
 
   render() {
-    const { style, value, valueComponent: ValueComponent } = this.props;
+    const {
+      style,
+      value,
+      valueComponent: ValueComponent,
+      iconComponent: IconComponent,
+    } = this.props;
     const { opened } = this.state;
     return (
       <React.Fragment>
@@ -143,7 +153,7 @@ export default class Select extends React.Component {
             <ValueComponent value={value} />
           </div>
           <button className={styles.button} onClick={this.openItemsContainer}>
-            <ArrowIcon />
+            <IconComponent />
           </button>
         </div>
         {opened && this.renderItemsContainer()}

@@ -1,7 +1,7 @@
 import React from "react";
 import { Select } from "../components/Select";
 
-export default class DefaultSelect extends React.Component {
+export default class MultipleSelect extends React.Component {
   state = {
     value: this.props.value,
   };
